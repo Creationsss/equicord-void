@@ -32,5 +32,6 @@ do_install() {
 
 	vinstall ${FILESDIR}/equibop.desktop 644 usr/share/applications
 	vinstall static/icon.png 644 usr/share/pixmaps equibop.png
+	vinstall build/icon.svg 644 usr/share/icons/hicolor/scalable/apps equibop.svg
 	vlicense LICENSE
 }
