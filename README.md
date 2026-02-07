@@ -1,23 +1,19 @@
-# Equicord Void Repository
+# Void Repository
 
-Void Linux packages for Equicord projects.
+A third-party Void Linux binary package repository.
 
-## Packages
-
-- `equibop` - Discord desktop app with Equicord pre-installed
-
-## Install
+## Setup
 
 Add the repo:
 
 ```sh
-echo "repository=https://creationsss.github.io/equicord-void" | sudo tee /etc/xbps.d/equicord.conf
+echo "repository=https://creationsss.github.io/void-repository" | sudo tee /etc/xbps.d/creations.conf
 ```
 
 Install a package:
 
 ```sh
-sudo xbps-install -S equibop
+sudo xbps-install -S <package>
 ```
 
 Updates come through normally with:
