@@ -7,7 +7,7 @@ A third-party Void Linux binary package repository.
 Add the repo:
 
 ```sh
-echo "repository=https://creationsss.github.io/void-repository" | sudo tee /etc/xbps.d/creations.conf
+echo "repository=https://void.creations.works" | sudo tee /etc/xbps.d/creations.conf
 ```
 
 Install a package:
