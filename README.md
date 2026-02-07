@@ -11,7 +11,7 @@ Void Linux packages for Equicord projects.
 Add the repo:
 
 ```sh
-echo "repository=https://creations.github.io/equicord-void" | sudo tee /etc/xbps.d/equicord.conf
+echo "repository=https://creationsss.github.io/equicord-void" | sudo tee /etc/xbps.d/equicord.conf
 ```
 
 Install a package:
