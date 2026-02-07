@@ -24,7 +24,12 @@ jobs:
       - name: Install dependencies
         run: |
           xbps-install -Syu -y
-          xbps-install -y git xbps xtools base-devel
+          xbps-install -y git xbps xtools base-devel curl unzip
+
+      - name: Install bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          ln -s /root/.bun/bin/bun /usr/local/bin/bun
 
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -47,6 +52,7 @@ jobs:
           echo "XBPS_ALLOW_CHROOT_BREAKOUT=yes" >> etc/conf
           echo "XBPS_ALLOW_RESTRICTED=yes" >> etc/conf
           ./xbps-src binary-bootstrap
+          cp /root/.bun/bin/bun masterdir-x86_64/usr/bin/bun
 
       - name: Build packages
         run: |
