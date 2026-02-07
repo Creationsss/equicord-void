@@ -1,0 +1,15 @@
+# Template file for 'obs-vkcapture'
+pkgname=obs-vkcapture
+version=1.5.3
+revision=1
+build_style=cmake
+hostmakedepends="cmake pkg-config wayland-devel"
+makedepends="Vulkan-Headers vulkan-loader-devel MesaLib-devel obs-devel simde
+ libX11-devel libxcb-devel wayland-devel wayland-protocols"
+depends="vulkan-loader obs"
+short_desc="OBS Game Capture via Vulkan/OpenGL hooks"
+maintainer="creations <creations@equicord.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/nowrep/obs-vkcapture"
+distfiles="https://github.com/nowrep/obs-vkcapture/archive/refs/tags/v${version}.tar.gz"
+checksum=33ac77427ba30f8d4bdd0921b04ad47385afcf2d52575e7023047c7b17ddd858
