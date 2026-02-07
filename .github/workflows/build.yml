@@ -75,7 +75,7 @@ jobs:
         run: |
           cd /void-packages/hostdir/binpkgs
           xbps-rindex -a *.xbps
-          xbps-rindex --privkey /tmp/keys/private.pem --sign --signedby "Equicord Void Repo"
+          xbps-rindex --privkey /tmp/keys/private.pem --sign --signedby "Equicord Void Repo" .
           xbps-rindex --privkey /tmp/keys/private.pem --sign-pkg *.xbps
           rm -f /tmp/keys/private.pem
 
