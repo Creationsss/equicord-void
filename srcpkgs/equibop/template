@@ -3,7 +3,7 @@ pkgname=equibop
 version=3.1.8
 revision=1
 _electronver=35
-hostmakedepends="gcc nodejs python3 pkg-config libglib-devel"
+hostmakedepends="gcc nodejs nodejs-devel python3 pkg-config libglib-devel"
 depends="electron${_electronver}"
 short_desc="Custom Discord desktop app with Equicord pre-installed"
 maintainer="creations <creations@equicord.org>"
@@ -16,6 +16,7 @@ nostrip=yes
 
 do_build() {
 	export SKIP_BUN_DOWNLOAD=true
+	export npm_config_nodedir=/usr
 	CI=true bun install
 	bun run buildLibVesktop
 	bun run package:dir
