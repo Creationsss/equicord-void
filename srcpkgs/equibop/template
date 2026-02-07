@@ -1,0 +1,35 @@
+# Template file for 'equibop'
+pkgname=equibop
+version=3.1.8
+revision=1
+_electronver=40
+hostmakedepends="bun cmake gcc nodejs npm"
+depends="electron${_electronver}"
+short_desc="Custom Discord desktop app with Equicord pre-installed"
+maintainer="creations <creations@equicord.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Equicord/Equibop"
+distfiles="https://github.com/Equicord/Equibop/archive/refs/tags/v${version}.tar.gz"
+checksum=654fee5b7b488b7b99eb444abdef0674205b3465ce0202251446b306c5d16fcf
+wrksrc="Equibop-${version}"
+nostrip=yes
+
+do_build() {
+	export SKIP_BUN_DOWNLOAD=true
+	CI=true bun install
+	bun run buildLibVesktop
+	bun run package:dir
+}
+
+do_install() {
+	vmkdir usr/lib/equibop
+	vinstall dist/linux-unpacked/resources/app.asar 644 usr/lib/equibop
+	vinstall dist/linux-unpacked/resources/app-update.yml 644 usr/lib/equibop
+	vcopy dist/linux-unpacked/resources/arrpc usr/lib/equibop
+
+	vbin ${FILESDIR}/equibop.sh equibop
+
+	vinstall ${FILESDIR}/equibop.desktop 644 usr/share/applications
+	vinstall static/icon.png 644 usr/share/pixmaps equibop.png
+	vlicense LICENSE
+}

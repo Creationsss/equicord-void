@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Equibop
+GenericName=Internet Messenger
+Comment=Custom Discord desktop app with Equicord pre-installed
+Type=Application
+Exec=/usr/bin/equibop
+Icon=equibop
+Categories=Network;InstantMessaging;Chat;
+Keywords=discord;equicord;equibop
+MimeType=x-scheme-handler/discord
+StartupWMClass=equibop

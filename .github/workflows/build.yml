@@ -1,0 +1,87 @@
+name: Build and publish XBPS packages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/void-linux/void-glibc-full:latest
+    steps:
+      - name: Install dependencies
+        run: |
+          xbps-install -Syu -y
+          xbps-install -y git xbps xtools base-devel
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Clone void-packages
+        run: |
+          git clone --depth 1 https://github.com/void-linux/void-packages /void-packages
+
+      - name: Copy srcpkgs into void-packages
+        run: |
+          for pkg in srcpkgs/*/; do
+            pkgname="$(basename "$pkg")"
+            cp -r "$pkg" "/void-packages/srcpkgs/$pkgname"
+            echo ":: Copied $pkgname"
+          done
+
+      - name: Bootstrap xbps-src
+        run: |
+          cd /void-packages
+          ln -s / masterdir
+          echo "XBPS_ALLOW_CHROOT_BREAKOUT=yes" >> etc/conf
+
+      - name: Build packages
+        run: |
+          cd /void-packages
+          for pkg in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
+            pkgname="$(basename "$pkg")"
+            echo ":: Building $pkgname..."
+            ./xbps-src -j"$(nproc)" pkg "$pkgname"
+          done
+
+      - name: Import signing key
+        env:
+          XBPS_SIGNING_KEY: ${{ secrets.XBPS_SIGNING_KEY }}
+        run: |
+          mkdir -p /tmp/keys
+          echo "$XBPS_SIGNING_KEY" > /tmp/keys/private.pem
+
+      - name: Sign repository
+        run: |
+          cd /void-packages/hostdir/binpkgs
+          xbps-rindex -a *.xbps
+          xbps-rindex --privkey /tmp/keys/private.pem --sign --signedby "Equicord Void Repo" *.xbps
+          xbps-rindex --privkey /tmp/keys/private.pem --sign-pkg *.xbps
+          rm -f /tmp/keys/private.pem
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: /void-packages/hostdir/binpkgs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
