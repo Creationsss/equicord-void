@@ -45,6 +45,7 @@ jobs:
           cd /void-packages
           ln -s / masterdir
           echo "XBPS_ALLOW_CHROOT_BREAKOUT=yes" >> etc/conf
+          echo "XBPS_CHROOT_CMD=ethereal" >> etc/conf
 
       - name: Build packages
         run: |
