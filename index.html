@@ -19,10 +19,25 @@
 			a {
 				color: inherit;
 			}
+			input {
+				font-family: monospace;
+				font-size: 1rem;
+				padding: 0.25rem 0.5rem;
+				border: 1px solid #888;
+				background: inherit;
+				color: inherit;
+				outline: none;
+				width: 20ch;
+			}
+			.pkg { display: block; }
+			.pkg.hidden { display: none; }
 			@media (prefers-color-scheme: dark) {
 				body {
 					color: #ddd;
 					background: #111;
+				}
+				input {
+					border-color: #555;
 				}
 			}
 		</style>
@@ -44,6 +59,17 @@ Update:
   sudo xbps-install -Su
 
 Source: <a href="https://github.com/Creationsss/void-repository">github.com/Creations/void-repository</a>
-</pre>
+
+Packages: <input type="text" id="search" placeholder="search..." autocomplete="off" />
+<span id="pkglist"><!-- PACKAGES --></span></pre>
 	</body>
+	<script>
+		document.getElementById("search").addEventListener("input", function () {
+			var q = this.value.toLowerCase();
+			var pkgs = document.querySelectorAll(".pkg");
+			for (var i = 0; i < pkgs.length; i++) {
+				pkgs[i].classList.toggle("hidden", q && pkgs[i].textContent.toLowerCase().indexOf(q) === -1);
+			}
+		});
+	</script>
 </html>

@@ -81,7 +81,19 @@ jobs:
 
       - name: Prepare site
         run: |
-          cp "$GITHUB_WORKSPACE/index.html" /void-packages/hostdir/binpkgs/
+          pkglist=""
+          for pkg in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
+            name="$(basename "$pkg")"
+            ver="$(sed -n 's/^version=//p' "$pkg/template")"
+            rev="$(sed -n 's/^revision=//p' "$pkg/template")"
+            desc="$(sed -n 's/^short_desc="\(.*\)"/\1/p' "$pkg/template")"
+            pkglist="${pkglist}<span class='pkg'>  ${name} ${ver}_${rev} - ${desc}</span>"
+          done
+          cp "$GITHUB_WORKSPACE/index.html" /void-packages/hostdir/binpkgs/index.html
+          printf '%s\n' "$pkglist" > /tmp/pkglist.html
+          sed -i '/<!-- PACKAGES -->/{r /tmp/pkglist.html
+          d
+          }' /void-packages/hostdir/binpkgs/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
