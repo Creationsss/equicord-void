@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/void-linux/void-glibc-full:latest
+      options: --privileged
     steps:
       - name: Install dependencies
         run: |
@@ -43,9 +44,9 @@ jobs:
       - name: Bootstrap xbps-src
         run: |
           cd /void-packages
-          ln -s / masterdir
           echo "XBPS_ALLOW_CHROOT_BREAKOUT=yes" >> etc/conf
-          echo "XBPS_CHROOT_CMD=ethereal" >> etc/conf
+          echo "XBPS_ALLOW_RESTRICTED=yes" >> etc/conf
+          ./xbps-src binary-bootstrap
 
       - name: Build packages
         run: |
