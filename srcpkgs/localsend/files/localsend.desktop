@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=LocalSend
+GenericName=File Sharing
+Type=Application
+Exec=localsend %U
+Icon=localsend
+Categories=GTK;Utility;FileTransfer;
+Keywords=sharing;lan;files;airdrop;
+StartupNotify=true

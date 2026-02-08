@@ -1,0 +1,26 @@
+# Template file for 'localsend'
+pkgname=localsend
+version=1.17.0
+revision=1
+archs="x86_64"
+create_wrksrc=yes
+depends="gtk+3 libayatana-appindicator hicolor-icon-theme desktop-file-utils"
+short_desc="Open source cross-platform alternative to AirDrop"
+maintainer="creations <creations@equicord.org>"
+license="Apache-2.0"
+homepage="https://github.com/localsend/localsend"
+distfiles="https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}-linux-x86-64.tar.gz"
+checksum=6f05e851b72dbeaac764d3446b5a61c34db22f6278baa92607d5b080997f8c81
+nostrip=yes
+
+do_install() {
+	vmkdir usr/lib/localsend
+	vcopy localsend_app usr/lib/localsend
+	vcopy lib usr/lib/localsend
+	vcopy data usr/lib/localsend
+	chmod 755 ${DESTDIR}/usr/lib/localsend/localsend_app
+	vbin ${FILESDIR}/localsend.sh localsend
+	vinstall ${FILESDIR}/localsend.desktop 644 usr/share/applications
+	vinstall data/flutter_assets/assets/img/logo-512.png 644 usr/share/pixmaps localsend.png
+	vlicense ${FILESDIR}/LICENSE
+}
