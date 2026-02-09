@@ -4,7 +4,7 @@ version=1.7.4
 revision=1
 _version="${version//./_}"
 archs="x86_64"
-wrksrc=squashfs-root
+create_wrksrc=yes
 short_desc="Easy graphical interface to configure MangoHud, vkBasalt, and OptiScaler"
 maintainer="creations <creations@creations.works>"
 license="GPL-3.0-or-later"
@@ -18,6 +18,8 @@ do_extract() {
 	local _appimage="${XBPS_SRCDISTDIR}/${pkgname}-${version}/goverlay_${_version}-anylinux-x86_64.AppImage"
 	chmod +x "$_appimage"
 	"$_appimage" --appimage-extract
+	cp -a squashfs-root/. .
+	rm -rf squashfs-root
 }
 
 do_install() {
