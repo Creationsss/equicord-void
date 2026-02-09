@@ -1,0 +1,26 @@
+# Template file for 'helium'
+pkgname=helium
+version=0.8.5.1
+revision=1
+archs="x86_64"
+depends="gtk+3 nss libXtst alsa-lib hicolor-icon-theme desktop-file-utils"
+short_desc="Chromium-based browser focused on privacy and performance"
+maintainer="creations <creations@creations.works>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/imputnet/helium-linux"
+distfiles="https://github.com/imputnet/helium-linux/releases/download/${version}/helium-${version}-x86_64_linux.tar.xz"
+checksum=fdca76d35b62c3637ec6c8fcf4cb34e9e7c9c989df81cd38ba8267bec8c35288
+wrksrc="helium-${version}-x86_64_linux"
+nostrip=yes
+
+do_install() {
+	vmkdir usr/lib/helium
+	vcopy "*" usr/lib/helium
+	rm -f ${DESTDIR}/usr/lib/helium/helium.desktop
+	rm -f ${DESTDIR}/usr/lib/helium/chromedriver
+
+	vbin ${FILESDIR}/helium.sh helium
+	vinstall helium.desktop 644 usr/share/applications
+	vinstall product_logo_256.png 644 usr/share/pixmaps helium.png
+	vlicense ${FILESDIR}/LICENSE
+}
