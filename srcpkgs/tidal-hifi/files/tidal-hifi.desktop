@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=TIDAL Hi-Fi
+GenericName=Music Player
+Type=Application
+Exec=tidal-hifi %U
+Icon=tidal-hifi
+Categories=Audio;Music;Player;AudioVideo;
+Keywords=tidal;music;streaming;hifi;
+StartupWMClass=tidal-hifi
+StartupNotify=true

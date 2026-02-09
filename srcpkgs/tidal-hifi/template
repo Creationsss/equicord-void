@@ -1,0 +1,32 @@
+# Template file for 'tidal-hifi'
+pkgname=tidal-hifi
+version=6.1.0
+revision=1
+archs="x86_64"
+depends="gtk+3 nss libXtst alsa-lib hicolor-icon-theme desktop-file-utils"
+short_desc="Web version of TIDAL running in electron with Hi-Fi support"
+maintainer="creations <creations@creations.works>"
+license="MIT"
+homepage="https://github.com/Mastermindzh/tidal-hifi"
+distfiles="https://github.com/Mastermindzh/tidal-hifi/releases/download/${version}/tidal-hifi-${version}.tar.gz"
+checksum=66eef54ddd75cd4c8283f4a6e8bd4d807e447f894fcc968d36632097ac22ede7
+nostrip=yes
+allow_unknown_shlibs=yes
+
+do_install() {
+	vmkdir usr/lib/tidal-hifi
+	vcopy tidal-hifi usr/lib/tidal-hifi
+	vcopy chrome_crashpad_handler usr/lib/tidal-hifi
+	vcopy "*.so*" usr/lib/tidal-hifi
+	vcopy "*.pak" usr/lib/tidal-hifi
+	vcopy "*.bin" usr/lib/tidal-hifi
+	vcopy "*.dat" usr/lib/tidal-hifi
+	vcopy "*.json" usr/lib/tidal-hifi
+	vcopy locales usr/lib/tidal-hifi
+	vcopy resources usr/lib/tidal-hifi
+	chmod 755 ${DESTDIR}/usr/lib/tidal-hifi/tidal-hifi
+	vbin ${FILESDIR}/tidal-hifi.sh tidal-hifi
+	vinstall ${FILESDIR}/tidal-hifi.desktop 644 usr/share/applications
+	vinstall ${FILESDIR}/tidal-hifi.png 644 usr/share/pixmaps
+	vlicense ${FILESDIR}/LICENSE
+}
