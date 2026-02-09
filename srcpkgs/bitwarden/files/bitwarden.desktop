@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Bitwarden
+GenericName=Password Manager
+Type=Application
+Exec=bitwarden %U
+Icon=bitwarden
+Categories=Utility;Security;
+Keywords=password;vault;security;
+StartupWMClass=Bitwarden
+StartupNotify=true
+MimeType=x-scheme-handler/bitwarden;

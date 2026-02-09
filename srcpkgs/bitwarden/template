@@ -1,0 +1,35 @@
+# Template file for 'bitwarden'
+pkgname=bitwarden
+version=2026.1.0
+revision=1
+archs="x86_64"
+create_wrksrc=yes
+depends="gtk+3 nss libXtst alsa-lib hicolor-icon-theme desktop-file-utils"
+short_desc="Secure and free password manager for all devices"
+maintainer="creations <creations@creations.works>"
+license="GPL-3.0-only"
+homepage="https://bitwarden.com"
+distfiles="https://github.com/bitwarden/clients/releases/download/desktop-v${version}/bitwarden_${version}_x64.tar.gz"
+checksum=be2d582eda7837ecadd5aad4dbb5de325d217a7c40c1a49d865f94de91aaf221
+nostrip=yes
+
+do_install() {
+	vmkdir usr/lib/bitwarden
+	vcopy bitwarden-app usr/lib/bitwarden
+	vcopy desktop_proxy usr/lib/bitwarden
+	vcopy chrome_crashpad_handler usr/lib/bitwarden
+	vcopy "*.so*" usr/lib/bitwarden
+	vcopy "*.pak" usr/lib/bitwarden
+	vcopy "*.bin" usr/lib/bitwarden
+	vcopy "*.dat" usr/lib/bitwarden
+	vcopy "*.json" usr/lib/bitwarden
+	vcopy locales usr/lib/bitwarden
+	vcopy resources usr/lib/bitwarden
+	chmod 755 ${DESTDIR}/usr/lib/bitwarden/bitwarden-app
+	chmod 755 ${DESTDIR}/usr/lib/bitwarden/desktop_proxy
+	chmod 755 ${DESTDIR}/usr/lib/bitwarden/chrome_crashpad_handler
+	vbin ${FILESDIR}/bitwarden.sh bitwarden
+	vinstall ${FILESDIR}/bitwarden.desktop 644 usr/share/applications
+	vinstall resources/icons/256x256.png 644 usr/share/pixmaps bitwarden.png
+	vlicense ${FILESDIR}/LICENSE
+}
