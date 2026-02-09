@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Bruno
+GenericName=API Client
+Type=Application
+Exec=bruno %U
+Icon=bruno
+Categories=Development;
+Keywords=api;rest;graphql;http;
+Comment=Opensource API Client for Exploring and Testing APIs
+StartupWMClass=Bruno
+StartupNotify=true
+MimeType=x-scheme-handler/bruno;

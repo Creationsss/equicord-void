@@ -1,0 +1,34 @@
+# Template file for 'bruno'
+pkgname=bruno
+version=3.0.2
+revision=1
+archs="x86_64"
+create_wrksrc=yes
+depends="gtk+3 nss libXtst alsa-lib hicolor-icon-theme desktop-file-utils"
+short_desc="Opensource API client for exploring and testing APIs"
+maintainer="creations <creations@creations.works>"
+license="MIT"
+homepage="https://www.usebruno.com"
+distfiles="https://github.com/usebruno/bruno/releases/download/v${version}/bruno_${version}_amd64_linux.deb"
+checksum=7337897b7729b01284c1ea5f365076e56f04c9937abbc749b847451b6d568271
+nostrip=yes
+allow_unknown_shlibs=yes
+
+do_extract() {
+	ar x ${XBPS_SRCDISTDIR}/${pkgname}-${version}/bruno_${version}_amd64_linux.deb
+	bsdtar -xf data.tar.xz
+}
+
+do_install() {
+	vmkdir usr/lib/bruno
+	vcopy "opt/Bruno/*" usr/lib/bruno
+	chmod 755 ${DESTDIR}/usr/lib/bruno/bruno
+	chmod 755 ${DESTDIR}/usr/lib/bruno/chrome_crashpad_handler
+	vbin ${FILESDIR}/bruno.sh bruno
+	vinstall ${FILESDIR}/bruno.desktop 644 usr/share/applications
+	for size in 16 24 32 48 64 128 256 512 1024; do
+		vinstall usr/share/icons/hicolor/${size}x${size}/apps/bruno.png 644 \
+			usr/share/icons/hicolor/${size}x${size}/apps
+	done
+	vlicense ${FILESDIR}/LICENSE
+}
