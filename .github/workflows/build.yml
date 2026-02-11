@@ -87,7 +87,33 @@ jobs:
             ver="$(sed -n 's/^version=//p' "$pkg/template")"
             rev="$(sed -n 's/^revision=//p' "$pkg/template")"
             desc="$(sed -n 's/^short_desc="\(.*\)"/\1/p' "$pkg/template")"
-            pkglist="${pkglist}<span class='pkg'>  ${name} ${ver}_${rev} - ${desc}</span>"
+            dist="$(sed -n 's/^distfiles="\(.*\)"/\1/p' "$pkg/template")"
+
+            api="github"
+            api_url=""
+            repo=""
+            tag_prefix=""
+
+            if echo "$dist" | grep -q 'github\.com'; then
+              repo="$(echo "$dist" | sed -n 's|.*github\.com/\([^/]*/[^/]*\)/.*|\1|p')"
+            elif echo "$dist" | grep -q 'heliopolis\.live'; then
+              api="gitea"
+              api_url="https://heliopolis.live"
+              repo="$(echo "$dist" | sed -n 's|.*heliopolis\.live/\([^/]*/[^/]*\)/.*|\1|p')"
+            fi
+
+            if echo "$dist" | grep -q "desktop-v\${version}\|desktop-v${ver}"; then
+              tag_prefix="desktop-v"
+            elif echo "$dist" | grep -q "v\${version}\|v${ver}\|tags/v"; then
+              tag_prefix="v"
+            fi
+
+            attrs="data-repo='${repo}' data-version='${ver}' data-tag-prefix='${tag_prefix}' data-api='${api}'"
+            if [ -n "$api_url" ]; then
+              attrs="${attrs} data-api-url='${api_url}'"
+            fi
+
+            pkglist="${pkglist}<span class='pkg' ${attrs}>  ${name} ${ver}_${rev} - ${desc}</span>"
           done
           cp "$GITHUB_WORKSPACE/index.html" /void-packages/hostdir/binpkgs/index.html
           printf '%s\n' "$pkglist" > /tmp/pkglist.html

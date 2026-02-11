@@ -31,6 +31,9 @@
 			}
 			.pkg { display: block; }
 			.pkg.hidden { display: none; }
+			.ver-ok { color: #2a2; }
+			.ver-update { color: #c80; }
+			.ver-error { color: #888; }
 			@media (prefers-color-scheme: dark) {
 				body {
 					color: #ddd;
@@ -39,6 +42,8 @@
 				input {
 					border-color: #555;
 				}
+				.ver-ok { color: #5b5; }
+				.ver-update { color: #eb4; }
 			}
 		</style>
 	</head>
@@ -71,5 +76,106 @@ Packages: <input type="text" id="search" placeholder="search..." autocomplete="o
 				pkgs[i].classList.toggle("hidden", q && pkgs[i].textContent.toLowerCase().indexOf(q) === -1);
 			}
 		});
+
+		(function () {
+			var CACHE_KEY = "void-repo-versions";
+			var CACHE_TTL = 3600000;
+			var cache = {};
+
+			try {
+				var stored = JSON.parse(localStorage.getItem(CACHE_KEY));
+				if (stored && Date.now() - stored.ts < CACHE_TTL) {
+					cache = stored.data;
+				}
+			} catch (e) {}
+
+			var pkgs = document.querySelectorAll(".pkg[data-repo]");
+			var pending = 0;
+
+			for (var i = 0; i < pkgs.length; i++) {
+				checkVersion(pkgs[i]);
+			}
+
+			function saveCache() {
+				try {
+					localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: cache }));
+				} catch (e) {}
+			}
+
+			function checkVersion(el) {
+				var repo = el.getAttribute("data-repo");
+				var current = el.getAttribute("data-version");
+				var prefix = el.getAttribute("data-tag-prefix") || "";
+				var api = el.getAttribute("data-api") || "github";
+				var apiUrl = el.getAttribute("data-api-url") || "";
+
+				if (!repo) return;
+
+				if (cache[repo]) {
+					showResult(el, current, cache[repo]);
+					return;
+				}
+
+				var url;
+				if (api === "gitea") {
+					url = apiUrl + "/api/v1/repos/" + repo + "/releases/latest";
+				} else if (prefix === "desktop-v") {
+					url = "https://api.github.com/repos/" + repo + "/releases";
+				} else {
+					url = "https://api.github.com/repos/" + repo + "/releases/latest";
+				}
+
+				pending++;
+				fetch(url)
+					.then(function (r) { return r.json(); })
+					.then(function (data) {
+						var tag;
+						if (prefix === "desktop-v" && Array.isArray(data)) {
+							for (var j = 0; j < data.length; j++) {
+								if (data[j].tag_name && data[j].tag_name.indexOf("desktop-v") === 0) {
+									tag = data[j].tag_name;
+									break;
+								}
+							}
+						} else {
+							tag = data.tag_name;
+						}
+
+						if (!tag) {
+							appendStatus(el, "?", "ver-error");
+							return;
+						}
+
+						var latest = tag;
+						if (prefix && latest.indexOf(prefix) === 0) {
+							latest = latest.substring(prefix.length);
+						}
+
+						cache[repo] = latest;
+						showResult(el, current, latest);
+					})
+					.catch(function () {
+						appendStatus(el, "?", "ver-error");
+					})
+					.finally(function () {
+						if (--pending <= 0) saveCache();
+					});
+			}
+
+			function showResult(el, current, latest) {
+				if (latest === current) {
+					appendStatus(el, "up to date", "ver-ok");
+				} else {
+					appendStatus(el, latest + " available", "ver-update");
+				}
+			}
+
+			function appendStatus(el, text, cls) {
+				var span = document.createElement("span");
+				span.className = cls;
+				span.textContent = " [" + text + "]";
+				el.appendChild(span);
+			}
+		})();
 	</script>
 </html>
