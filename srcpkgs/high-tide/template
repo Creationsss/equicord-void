@@ -41,7 +41,7 @@ post_install() {
 		python3 -c "import zipfile; zipfile.ZipFile('${_srcdist}/${_whl}').extractall('${_sitepkgs}')"
 	done
 
-	bsdtar -C "${_sitepkgs}" -xf "${_srcdist}/ratelimit-${_ratelimit_ver}.tar.gz" \
+	bsdtar --no-same-owner -C "${_sitepkgs}" -xf "${_srcdist}/ratelimit-${_ratelimit_ver}.tar.gz" \
 		--strip-components=1 "ratelimit-${_ratelimit_ver}/ratelimit"
 
 	vlicense COPYING
