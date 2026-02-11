@@ -1,0 +1,48 @@
+# Template file for 'high-tide'
+pkgname=high-tide
+version=1.2.0
+revision=1
+_tidalapi_ver=0.8.11
+_pypresence_ver=4.6.1
+_mpegdash_ver=0.4.1
+_ratelimit_ver=2.2.1
+build_style=meson
+hostmakedepends="meson pkg-config gettext blueprint-compiler desktop-file-utils glib-devel python3"
+makedepends="libadwaita-devel libportal-gtk4-devel libsecret-devel"
+depends="python3-gobject python3-requests python3-six python3-dateutil
+ python3-isodate python3-pyaes python3-typing_extensions
+ gst-plugins-good1 gst-plugins-base1 glib-networking
+ libadwaita libportal-gtk4 libsecret"
+short_desc="Libadwaita TIDAL client for Linux"
+maintainer="creations <creations@creations.works>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Nokse22/high-tide"
+distfiles="https://github.com/Nokse22/high-tide/archive/refs/tags/v${version}.tar.gz
+ https://files.pythonhosted.org/packages/a0/dc/11ae1f4150754e82234a56ed4d94d5c326022502ce3f1e6e214f569c5c3e/tidalapi-${_tidalapi_ver}-py3-none-any.whl>tidalapi-${_tidalapi_ver}.whl
+ https://files.pythonhosted.org/packages/bd/0d/1c817c6769ce0b64cc0dcc20bc9d0edb4dc560e83a3b5f0d5cbda04c3d35/pypresence-${_pypresence_ver}-py3-none-any.whl>pypresence-${_pypresence_ver}.whl
+ https://files.pythonhosted.org/packages/ca/a0/7a2734a7d734d81b6627ac1c470ce388f5a80e5669d9803a5c3c179ca84f/mpegdash-${_mpegdash_ver}-py3-none-any.whl>mpegdash-${_mpegdash_ver}.whl
+ https://files.pythonhosted.org/packages/ab/38/ff60c8fc9e002d50d48822cc5095deb8ebbc5f91a6b8fdd9731c87a147c9/ratelimit-${_ratelimit_ver}.tar.gz"
+checksum="4eebcb0265963bea4aa336f7319a9e029d7f763edb5b28c28449c6339987f679
+ 1ed2485bb4634907afc434163fba22dc8a323d90cc92306973ab68bcdfef5c54
+ 33d4549fcdf4102f81935df4ba587bacb22193e0c50c541d1ab9329b21df33cd
+ 788e559b73acbf9175422548c58a4c441486c0ce0633fa10f77097bfffeaad4d
+ af8a9b64b821529aca09ebaf6d8d279100d766f19e90b5059ac6a718ca6dee42"
+skip_extraction="tidalapi-${_tidalapi_ver}.whl
+ pypresence-${_pypresence_ver}.whl
+ mpegdash-${_mpegdash_ver}.whl
+ ratelimit-${_ratelimit_ver}.tar.gz"
+
+post_install() {
+	local _pyver=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+	local _sitepkgs="${DESTDIR}/usr/lib/python${_pyver}/site-packages"
+	local _srcdist="${XBPS_SRCDISTDIR}/${pkgname}-${version}"
+
+	for _whl in tidalapi-${_tidalapi_ver}.whl pypresence-${_pypresence_ver}.whl mpegdash-${_mpegdash_ver}.whl; do
+		python3 -c "import zipfile; zipfile.ZipFile('${_srcdist}/${_whl}').extractall('${_sitepkgs}')"
+	done
+
+	bsdtar -C "${_sitepkgs}" -xf "${_srcdist}/ratelimit-${_ratelimit_ver}.tar.gz" \
+		--strip-components=1 "ratelimit-${_ratelimit_ver}/ratelimit"
+
+	vlicense COPYING
+}
