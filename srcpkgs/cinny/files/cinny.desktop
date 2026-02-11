@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Cinny
+Comment=Yet another matrix client
+Exec=cinny
+Icon=cinny
+Terminal=false
+Type=Application
+Categories=Network;Chat;InstantMessaging;
+Keywords=matrix;chat;messenger;
