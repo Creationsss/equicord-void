@@ -2,7 +2,6 @@
 pkgname=inter-font
 version=4.1
 revision=1
-archs=noarch
 create_wrksrc=yes
 short_desc="The Inter font family"
 maintainer="creations <creations@creations.works>"
