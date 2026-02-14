@@ -1,0 +1,53 @@
+# Template file for 'openrgb'
+pkgname=openrgb
+version=1.0rc2
+revision=1
+_commit=0fca93e
+archs="x86_64"
+create_wrksrc=yes
+short_desc="Open source RGB lighting control that doesn't depend on manufacturer software"
+maintainer="creations <creations@creations.works>"
+license="GPL-2.0-only"
+homepage="https://openrgb.org"
+distfiles="https://codeberg.org/OpenRGB/OpenRGB/releases/download/release_candidate_${version}/OpenRGB_${version}_x86_64_${_commit}.AppImage
+ https://codeberg.org/OpenRGB/OpenRGB/releases/download/release_candidate_${version}/60-openrgb.rules>60-openrgb.rules"
+checksum="7b6164327ce975f31d60c38e5e317518af7eda0d946e08a3964df22e77722ed0
+ 422dc825c2492e5b353013f7f934536ade94eb4bf2219a9f6886f746806fb3c2"
+skip_extraction="60-openrgb.rules"
+nostrip=yes
+allow_unknown_shlibs=yes
+
+do_extract() {
+	local _appimage="${XBPS_SRCDISTDIR}/${pkgname}-${version}/OpenRGB_${version}_x86_64_${_commit}.AppImage"
+	chmod +x "$_appimage"
+	"$_appimage" --appimage-extract
+	cp -a squashfs-root/. .
+	rm -rf squashfs-root
+}
+
+do_install() {
+	vmkdir usr/lib/openrgb
+	vcopy AppRun usr/lib/openrgb
+	vcopy AppRun.wrapped usr/lib/openrgb
+	vcopy apprun-hooks usr/lib/openrgb
+	vcopy org.openrgb.OpenRGB.desktop usr/lib/openrgb
+	vcopy org.openrgb.OpenRGB.png usr/lib/openrgb
+	vcopy usr usr/lib/openrgb
+	chmod 755 ${DESTDIR}/usr/lib/openrgb/AppRun
+	chmod 755 ${DESTDIR}/usr/lib/openrgb/AppRun.wrapped
+	chmod 755 ${DESTDIR}/usr/lib/openrgb/usr/bin/OpenRGB
+	find ${DESTDIR}/usr/lib/openrgb -type f -perm -0002 -exec chmod o-w {} \;
+
+	vbin ${FILESDIR}/openrgb.sh openrgb
+
+	vinstall ${FILESDIR}/openrgb.desktop 644 usr/share/applications
+	vinstall usr/share/icons/hicolor/128x128/apps/org.openrgb.OpenRGB.png 644 \
+		usr/share/icons/hicolor/128x128/apps
+	vinstall usr/share/icons/hicolor/128x128/apps/org.openrgb.OpenRGB.png 644 \
+		usr/share/pixmaps openrgb.png
+
+	vinstall "${XBPS_SRCDISTDIR}/${pkgname}-${version}/60-openrgb.rules" 644 \
+		usr/lib/udev/rules.d
+
+	vlicense ${FILESDIR}/LICENSE
+}

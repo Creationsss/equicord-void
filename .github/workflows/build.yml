@@ -96,13 +96,18 @@ jobs:
 
             if echo "$dist" | grep -q 'github\.com'; then
               repo="$(echo "$dist" | sed -n 's|.*github\.com/\([^/]*/[^/]*\)/.*|\1|p')"
+            elif echo "$dist" | grep -q 'codeberg\.org'; then
+              api="codeberg"
+              repo="$(echo "$dist" | sed -n 's|.*codeberg\.org/\([^/]*/[^/]*\)/.*|\1|p')"
             elif echo "$dist" | grep -q 'heliopolis\.live'; then
               api="gitlab"
               api_url="https://heliopolis.live"
               repo="$(echo "$dist" | sed -n 's|.*heliopolis\.live/\([^/]*/[^/]*\)/.*|\1|p')"
             fi
 
-            if echo "$dist" | grep -q "desktop-v\${version}\|desktop-v${ver}"; then
+            if echo "$dist" | grep -q "release_candidate_\${version}\|release_candidate_${ver}"; then
+              tag_prefix="release_candidate_"
+            elif echo "$dist" | grep -q "desktop-v\${version}\|desktop-v${ver}"; then
               tag_prefix="desktop-v"
             elif echo "$dist" | grep -q "v\${version}\|v${ver}\|tags/v"; then
               tag_prefix="v"

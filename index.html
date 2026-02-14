@@ -119,6 +119,8 @@ Packages: <input type="text" id="search" placeholder="search..." autocomplete="o
 				var url;
 				if (api === "gitlab") {
 					url = apiUrl + "/api/v4/projects/" + encodeURIComponent(repo) + "/repository/tags";
+				} else if (api === "codeberg") {
+					url = "https://codeberg.org/api/v1/repos/" + repo + "/releases/latest";
 				} else if (prefix === "desktop-v") {
 					url = "https://api.github.com/repos/" + repo + "/releases";
 				} else {
