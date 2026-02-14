@@ -1,5 +1,5 @@
-# Template file for 'openrgb'
-pkgname=openrgb
+# Template file for 'openrgb-bin'
+pkgname=openrgb-bin
 version=1.0rc2
 revision=1
 _commit=0fca93e
