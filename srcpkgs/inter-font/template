@@ -1,0 +1,19 @@
+# Template file for 'inter-font'
+pkgname=inter-font
+version=4.1
+revision=1
+archs=noarch
+create_wrksrc=yes
+short_desc="The Inter font family"
+maintainer="creations <creations@creations.works>"
+license="OFL-1.1"
+homepage="https://rsms.me/inter/"
+distfiles="https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip"
+checksum=9883fdd4a49d4fb66bd8177ba6625ef9a64aa45899767dde3d36aa425756b11e
+font_dirs="/usr/share/fonts/TTF"
+
+do_install() {
+	vinstall InterVariable.ttf 644 usr/share/fonts/TTF
+	vinstall InterVariable-Italic.ttf 644 usr/share/fonts/TTF
+	vlicense LICENSE.txt
+}
