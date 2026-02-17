@@ -1,6 +1,6 @@
 # Template file for 'bruno'
 pkgname=bruno
-version=3.0.2
+version=3.1.1
 revision=1
 archs="x86_64"
 create_wrksrc=yes
@@ -10,7 +10,7 @@ maintainer="creations <creations@creations.works>"
 license="MIT"
 homepage="https://www.usebruno.com"
 distfiles="https://github.com/usebruno/bruno/releases/download/v${version}/bruno_${version}_amd64_linux.deb"
-checksum=7337897b7729b01284c1ea5f365076e56f04c9937abbc749b847451b6d568271
+checksum=242586983f5aae26a23282f11ded19973ef4c2cbf6840529cf104183df8425e9
 nostrip=yes
 allow_unknown_shlibs=yes
 

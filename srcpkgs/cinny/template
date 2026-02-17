@@ -1,6 +1,6 @@
 # Template file for 'cinny'
 pkgname=cinny
-version=4.10.2
+version=4.10.3
 revision=1
 archs="x86_64"
 create_wrksrc=yes
@@ -9,7 +9,7 @@ maintainer="creations <creations@creations.works>"
 license="AGPL-3.0-or-later"
 homepage="https://github.com/cinnyapp/cinny-desktop"
 distfiles="https://github.com/cinnyapp/cinny-desktop/releases/download/v${version}/Cinny_desktop-x86_64.AppImage"
-checksum=7470584d3f78def6e4f68cd887ef61e0f9754127e85c011b51750c3a9b55a3cf
+checksum=0216f00cbe29f71a3742b45a6afa8672bf1dbe6d43d4559405c68236b9243a1c
 nostrip=yes
 allow_unknown_shlibs=yes
 
