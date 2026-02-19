@@ -10,7 +10,7 @@ maintainer="creations <creations@creations.works>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/Equicord/Equibop"
 distfiles="https://github.com/Equicord/Equibop/archive/refs/tags/v${version}.tar.gz"
-checksum=e344946af86a85c60bc4e7cc9efbfc3ac3fee7c41634bce1744bb41a6c0b469f
+checksum=683181aa9ec99cc5eaa8c63dd233c181c9580dbcf3d6406dadb21fd1720daad2
 wrksrc="Equibop-${version}"
 nostrip=yes
 
