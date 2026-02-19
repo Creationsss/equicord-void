@@ -83,6 +83,7 @@ jobs:
         run: |
           pkglist=""
           for pkg in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
+            [ -L "${pkg%/}" ] && continue
             name="$(basename "$pkg")"
             ver="$(sed -n 's/^version=//p' "$pkg/template")"
             rev="$(sed -n 's/^revision=//p' "$pkg/template")"
@@ -100,6 +101,7 @@ jobs:
               api="gitlab"
               api_url="https://invent.kde.org"
               repo="$kde_project"
+              tag_prefix="v"
             elif echo "$dist" | grep -q 'github\.com'; then
               repo="$(echo "$dist" | sed -n 's|.*github\.com/\([^/]*/[^/]*\)/.*|\1|p')"
             elif echo "$dist" | grep -q 'codeberg\.org'; then
