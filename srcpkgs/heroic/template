@@ -1,0 +1,35 @@
+# Template file for 'heroic'
+pkgname=heroic
+version=2.19.1
+revision=1
+archs="x86_64"
+create_wrksrc=yes
+depends="gtk+3 nss libXtst alsa-lib hicolor-icon-theme desktop-file-utils"
+short_desc="Open source launcher for GOG, Epic Games and Amazon Games"
+maintainer="creations <creations@creations.works>"
+license="GPL-3.0-or-later"
+homepage="https://heroicgameslauncher.com"
+distfiles="https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${version}/Heroic-${version}-linux-amd64.deb"
+checksum=1b24ed61546ff6dc386a01091599c9543e7d10cb082ce5a2db5eb12c1d49221c
+nostrip=yes
+allow_unknown_shlibs=yes
+
+do_extract() {
+	ar x ${XBPS_SRCDISTDIR}/${pkgname}-${version}/Heroic-${version}-linux-amd64.deb
+	bsdtar -xf data.tar.xz
+}
+
+do_install() {
+	vmkdir usr/lib/heroic
+	vcopy "opt/Heroic/*" usr/lib/heroic
+	chmod 755 ${DESTDIR}/usr/lib/heroic/heroic
+	chmod 755 ${DESTDIR}/usr/lib/heroic/chrome_crashpad_handler
+	vbin ${FILESDIR}/heroic.sh heroic
+	vinstall ${FILESDIR}/heroic.desktop 644 usr/share/applications
+	for size in 48 128 512; do
+		vinstall usr/share/icons/hicolor/${size}x${size}/apps/heroic.png 644 \
+			usr/share/icons/hicolor/${size}x${size}/apps
+	done
+	vinstall usr/share/icons/hicolor/128x128/apps/heroic.png 644 usr/share/pixmaps heroic.png
+	vlicense ${FILESDIR}/LICENSE
+}
