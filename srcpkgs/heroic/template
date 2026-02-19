@@ -1,10 +1,10 @@
 # Template file for 'heroic'
 pkgname=heroic
 version=2.19.1
-revision=1
+revision=2
 archs="x86_64"
 create_wrksrc=yes
-depends="gtk+3 nss libXtst alsa-lib hicolor-icon-theme desktop-file-utils"
+depends="gtk+3 nss libXtst alsa-lib hicolor-icon-theme desktop-file-utils legendary-heroic"
 short_desc="Open source launcher for GOG, Epic Games and Amazon Games"
 maintainer="creations <creations@creations.works>"
 license="GPL-3.0-or-later"
@@ -32,4 +32,12 @@ do_install() {
 	done
 	vinstall usr/share/icons/hicolor/128x128/apps/heroic.png 644 usr/share/pixmaps heroic.png
 	vlicense ${FILESDIR}/LICENSE
+
+	# Replace bundled PyInstaller legendary binary with system legendary.
+	# The bundled binary embeds its own libpython3.14 which pollutes
+	# LD_LIBRARY_PATH and breaks umu-launcher (and anything else using
+	# the system Python that legendary spawns as a child process).
+	rm -f ${DESTDIR}/usr/lib/heroic/resources/app.asar.unpacked/build/bin/x64/linux/legendary
+	vinstall ${FILESDIR}/legendary-wrapper.sh 755 \
+		usr/lib/heroic/resources/app.asar.unpacked/build/bin/x64/linux legendary
 }

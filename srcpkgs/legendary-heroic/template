@@ -1,0 +1,16 @@
+# Template file for 'legendary-heroic'
+pkgname=legendary-heroic
+version=0.20.39
+revision=1
+build_style=python3-module
+hostmakedepends="python3-setuptools"
+depends="python3-requests python3-requests-futures python3-filelock
+ python3-setuptools"
+short_desc="Epic Games Launcher replacement (Heroic fork)"
+maintainer="creations <creations@creations.works>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Heroic-Games-Launcher/legendary"
+distfiles="https://github.com/Heroic-Games-Launcher/legendary/archive/${version}.tar.gz"
+checksum=feb2cb0d7edf816375b5fde062154d52c86982f0a2352fb2fb0350f36fc51356
+make_check=no
+conflicts="legendary>=0"
