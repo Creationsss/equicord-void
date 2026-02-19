@@ -94,7 +94,13 @@ jobs:
             repo=""
             tag_prefix=""
 
-            if echo "$dist" | grep -q 'github\.com'; then
+            kde_project="$(sed -n 's/^_kde_project="\(.*\)"/\1/p' "$pkg/template")"
+
+            if [ -n "$kde_project" ]; then
+              api="gitlab"
+              api_url="https://invent.kde.org"
+              repo="$kde_project"
+            elif echo "$dist" | grep -q 'github\.com'; then
               repo="$(echo "$dist" | sed -n 's|.*github\.com/\([^/]*/[^/]*\)/.*|\1|p')"
             elif echo "$dist" | grep -q 'codeberg\.org'; then
               api="codeberg"

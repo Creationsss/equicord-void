@@ -1,0 +1,18 @@
+# Template file for 'audiocd-kio'
+pkgname=audiocd-kio
+version=25.12.2
+revision=1
+_kde_project="multimedia/audiocd-kio"
+build_style=cmake
+hostmakedepends="extra-cmake-modules pkg-config gettext qt6-base-devel kf6-kdoctools"
+makedepends="kf6-kio-devel kf6-ki18n-devel kf6-kconfig-devel kf6-kcmutils-devel
+ kf6-kwidgetsaddons-devel kf6-solid-devel libkcddb6-devel libkcompactdisc-devel
+ libcdparanoia-devel libflac-devel libvorbis-devel opus-devel lame-devel"
+depends="kf6-kio"
+short_desc="KIO worker for accessing audio CDs"
+maintainer="creations <creations@creations.works>"
+license="GPL-2.0-or-later, LGPL-2.0-or-later, GFDL-1.2-or-later"
+homepage="https://invent.kde.org/multimedia/audiocd-kio"
+distfiles="https://download.kde.org/stable/release-service/${version}/src/audiocd-kio-${version}.tar.xz"
+checksum=19b05dad94de5be4ea5f9dff736d74c58eccbde92d4f7c6249c09d92339e5490
+allow_unknown_shlibs=yes
