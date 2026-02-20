@@ -1,6 +1,6 @@
 # Template file for 'legendary-heroic'
 pkgname=legendary-heroic
-version=0.20.40
+version=0.20.41
 revision=1
 build_style=python3-module
 hostmakedepends="python3-setuptools"
@@ -11,6 +11,6 @@ maintainer="creations <creations@creations.works>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/Heroic-Games-Launcher/legendary"
 distfiles="https://github.com/Heroic-Games-Launcher/legendary/archive/${version}.tar.gz"
-checksum=a70fc03cf384aadee563de5fdf082f5481a93c2ded2abbbcd8d57d541679e415
+checksum=7bab16fd379729ed929b862e50f32a6b4cb06ccce811cef46a74abf406ee55f5
 make_check=no
 conflicts="legendary>=0"

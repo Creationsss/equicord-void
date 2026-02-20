@@ -1,7 +1,7 @@
 # Template file for 'heroic'
 pkgname=heroic
-version=2.19.1
-revision=2
+version=2.20.0
+revision=1
 archs="x86_64"
 create_wrksrc=yes
 depends="gtk+3 nss libXtst alsa-lib hicolor-icon-theme desktop-file-utils legendary-heroic"
@@ -10,7 +10,7 @@ maintainer="creations <creations@creations.works>"
 license="GPL-3.0-or-later"
 homepage="https://heroicgameslauncher.com"
 distfiles="https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${version}/Heroic-${version}-linux-amd64.deb"
-checksum=1b24ed61546ff6dc386a01091599c9543e7d10cb082ce5a2db5eb12c1d49221c
+checksum=37737e8f9dcd2fd94b0bd4de6eb4d00834a1a3858c9fc9927c44fa1798c50cbd
 nostrip=yes
 allow_unknown_shlibs=yes
 
