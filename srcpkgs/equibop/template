@@ -1,7 +1,7 @@
 # Template file for 'equibop'
 pkgname=equibop
 version=3.1.9
-revision=1
+revision=2
 _electronver=35
 hostmakedepends="gcc nodejs nodejs-devel python3 pkg-config libglib-devel"
 depends="electron${_electronver} hicolor-icon-theme desktop-file-utils"
@@ -11,10 +11,16 @@ license="GPL-3.0-or-later"
 homepage="https://github.com/Equicord/Equibop"
 distfiles="https://github.com/Equicord/Equibop/archive/refs/tags/v${version}.tar.gz"
 checksum=683181aa9ec99cc5eaa8c63dd233c181c9580dbcf3d6406dadb21fd1720daad2
+_githash=44000f82b50fd3497002aa965b217e8d2489dd53
 wrksrc="Equibop-${version}"
 nostrip=yes
 
 do_build() {
+	# Replace git rev-parse with the real commit hash from the release tag
+	# (source is from a tarball, not a git clone, so git rev-parse fails)
+	sed -i "s|execSync(\"git rev-parse HEAD\", { encoding: \"utf-8\" }).trim()|\"${_githash}\"|" \
+		scripts/build/build.mts
+
 	export SKIP_BUN_DOWNLOAD=true
 	export npm_config_nodedir=/usr
 	CI=true bun install
