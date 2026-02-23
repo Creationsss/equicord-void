@@ -1,6 +1,7 @@
 # Template file for 'python3-requests-futures'
 pkgname=python3-requests-futures
 version=1.0.2
+_vcheck_repo="ross/requests-futures"
 revision=1
 build_style=python3-module
 hostmakedepends="python3-setuptools"
