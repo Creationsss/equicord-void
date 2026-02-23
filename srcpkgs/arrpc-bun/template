@@ -1,0 +1,24 @@
+# Template file for 'arrpc-bun'
+pkgname=arrpc-bun
+version=1.3.5
+revision=1
+archs="x86_64"
+hostmakedepends="bun"
+short_desc="TypeScript/Bun port of arRPC - Open Discord RPC server"
+maintainer="creations <creations@creations.works>"
+license="MIT"
+homepage="https://github.com/Creationsss/arrpc-bun"
+distfiles="https://github.com/Creationsss/arrpc-bun/archive/refs/tags/v${version}.tar.gz"
+checksum=131040d1aa6da09a733d47a1577771dba7394e581b5a815efa0e53e73dcd9923
+nostrip=yes
+
+do_build() {
+	bun install --frozen-lockfile
+	bun build --compile ./src/index.ts --outfile arrpc-bun --target bun-linux-x64
+}
+
+do_install() {
+	vbin arrpc-bun
+	vsv arrpc-bun
+	vlicense LICENSE
+}
