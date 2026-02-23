@@ -39,6 +39,18 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/void-linux/void-packages /void-packages
 
+      - name: Detect build filter
+        env:
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+        run: |
+          filter="$(echo "$COMMIT_MSG" | grep -oE '\[[^]]+\]' | sed 's/\[//;s/\]//' | grep -viE '^(skip ci|ci skip|no ci|skip actions|actions skip)$' | tr '\n' ' ' | xargs)"
+          if [ -n "$filter" ]; then
+            echo "BUILD_ONLY=$filter" >> "$GITHUB_ENV"
+            echo ":: Building only: $filter"
+          else
+            echo ":: Building all packages"
+          fi
+
       - name: Copy srcpkgs into void-packages
         run: |
           for pkg in srcpkgs/*/; do
@@ -55,11 +67,22 @@ jobs:
           ./xbps-src binary-bootstrap
           cp /usr/local/bin/bun masterdir-x86_64/usr/bin/bun
 
+      - name: Restore package cache
+        uses: actions/cache/restore@v4
+        with:
+          path: /void-packages/hostdir/binpkgs
+          key: xbps-pkgs-
+          restore-keys: xbps-pkgs-
+
       - name: Build packages
         run: |
           cd /void-packages
           for pkg in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
             pkgname="$(basename "$pkg")"
+            if [ -n "$BUILD_ONLY" ]; then
+              echo "$BUILD_ONLY" | tr ' ' '\n' | grep -qx "$pkgname" || continue
+            fi
+            rm -f hostdir/binpkgs/${pkgname}-*.xbps
             echo ":: Building $pkgname..."
             ./xbps-src -j"$(nproc)" pkg "$pkgname"
           done
@@ -75,9 +98,16 @@ jobs:
         run: |
           cd /void-packages/hostdir/binpkgs
           xbps-rindex -a *.xbps
+          xbps-rindex --clean .
           xbps-rindex --privkey /tmp/keys/private.pem --sign --signedby "Creations Void Repo" .
           xbps-rindex --privkey /tmp/keys/private.pem --sign-pkg *.xbps
           rm -f /tmp/keys/private.pem
+
+      - name: Save package cache
+        uses: actions/cache/save@v4
+        with:
+          path: /void-packages/hostdir/binpkgs
+          key: xbps-pkgs-${{ github.run_id }}
 
       - name: Prepare site
         run: |
