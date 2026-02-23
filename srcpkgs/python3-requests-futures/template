@@ -2,6 +2,7 @@
 pkgname=python3-requests-futures
 version=1.0.2
 _vcheck_repo="ross/requests-futures"
+_vcheck_tag_prefix="v"
 revision=1
 build_style=python3-module
 hostmakedepends="python3-setuptools"
