@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=LosslessCut
+GenericName=Video Editor
+Type=Application
+Exec=losslesscut %U
+Icon=losslesscut
+Categories=AudioVideo;Video;AudioVideoEditing;
+Keywords=video;audio;lossless;cut;trim;edit;
+StartupWMClass=LosslessCut
+StartupNotify=true
+MimeType=video/mp4;video/x-matroska;video/webm;video/avi;audio/mpeg;audio/ogg;audio/flac;

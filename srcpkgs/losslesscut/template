@@ -1,0 +1,38 @@
+# Template file for 'losslesscut'
+pkgname=losslesscut
+version=3.68.0
+revision=1
+archs="x86_64"
+create_wrksrc=yes
+depends="gtk+3 nss libXtst alsa-lib hicolor-icon-theme desktop-file-utils"
+short_desc="Swiss army knife of lossless video/audio editing"
+maintainer="creations <creations@creations.works>"
+license="GPL-2.0-only"
+homepage="https://github.com/mifi/lossless-cut"
+distfiles="https://github.com/mifi/lossless-cut/releases/download/v${version}/LosslessCut-linux-x64.tar.bz2"
+checksum=784868a246adbcf78e0d491e4c9ad888d60d5031e4bc0eeafb716eba40e079ff
+nostrip=yes
+allow_unknown_shlibs=yes
+
+do_extract() {
+	bsdtar xjf ${XBPS_SRCDISTDIR}/${pkgname}-${version}/LosslessCut-linux-x64.tar.bz2 --strip-components=1
+}
+
+do_install() {
+	vmkdir usr/lib/losslesscut
+	vcopy losslesscut usr/lib/losslesscut
+	vcopy chrome_crashpad_handler usr/lib/losslesscut
+	vcopy "*.so*" usr/lib/losslesscut
+	vcopy "*.pak" usr/lib/losslesscut
+	vcopy "*.bin" usr/lib/losslesscut
+	vcopy "*.dat" usr/lib/losslesscut
+	vcopy "*.json" usr/lib/losslesscut
+	vcopy locales usr/lib/losslesscut
+	vcopy resources usr/lib/losslesscut
+	chmod 755 ${DESTDIR}/usr/lib/losslesscut/losslesscut
+	chmod 755 ${DESTDIR}/usr/lib/losslesscut/chrome_crashpad_handler
+	vbin ${FILESDIR}/losslesscut.sh losslesscut
+	vinstall ${FILESDIR}/losslesscut.desktop 644 usr/share/applications
+	vinstall ${FILESDIR}/losslesscut.svg 644 usr/share/pixmaps
+	vlicense LICENSE.electron.txt
+}
