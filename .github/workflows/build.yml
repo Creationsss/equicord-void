@@ -77,8 +77,8 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: /void-packages/hostdir/binpkgs
-          key: xbps-pkgs-
-          restore-keys: xbps-pkgs-
+          key: xbps-pkgs-v2-
+          restore-keys: xbps-pkgs-v2-
 
       - name: Clean stale repodata
         run: rm -f /void-packages/hostdir/binpkgs/*-repodata /void-packages/hostdir/binpkgs/*.plist
@@ -86,30 +86,15 @@ jobs:
       - name: Build packages
         run: |
           cd /void-packages
-          built=""
-          build_pkg() {
-            local p="$1"
-            echo "$built" | grep -qx "$p" && return 0
-            for dep_dir in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
-              [ -L "${dep_dir%/}" ] && continue
-              dep="$(basename "$dep_dir")"
-              [ "$dep" = "$p" ] && continue
-              if grep -qw "$dep" "$GITHUB_WORKSPACE/srcpkgs/$p/template" 2>/dev/null; then
-                build_pkg "$dep"
-              fi
-            done
-            if [ -n "$BUILD_ONLY" ]; then
-              echo "$BUILD_ONLY" | tr ' ' '\n' | grep -qx "$p" || { built="$(printf '%s\n%s' "$built" "$p")"; return 0; }
-            fi
-            rm -f hostdir/binpkgs/${p}-*.xbps
-            echo ":: Building $p..."
-            ./xbps-src -j"$(nproc)" pkg "$p"
-            built="$(printf '%s\n%s' "$built" "$p")"
-          }
           for pkg in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
             [ -L "${pkg%/}" ] && continue
             pkgname="$(basename "$pkg")"
-            build_pkg "$pkgname"
+            if [ -n "$BUILD_ONLY" ]; then
+              echo "$BUILD_ONLY" | tr ' ' '\n' | grep -qx "$pkgname" || continue
+            fi
+            rm -f hostdir/binpkgs/${pkgname}-*.xbps
+            echo ":: Building $pkgname..."
+            ./xbps-src -j"$(nproc)" pkg "$pkgname"
           done
 
       - name: Import signing key
@@ -132,7 +117,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: /void-packages/hostdir/binpkgs
-          key: xbps-pkgs-${{ github.run_id }}
+          key: xbps-pkgs-v2-${{ github.run_id }}
 
       - name: Prepare site
         run: |
