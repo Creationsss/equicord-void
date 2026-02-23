@@ -117,6 +117,9 @@ jobs:
               tag_prefix="release_candidate_"
             elif echo "$dist" | grep -q "desktop-v\${version}\|desktop-v${ver}"; then
               tag_prefix="desktop-v"
+            elif echo "$dist" | grep -q "@[^@]*@\${version}\|@[^@]*@${ver}"; then
+              tag_prefix="$(echo "$dist" | sed -n 's|.*\(@[^@]*@\)\${version}.*|\1|p')"
+              [ -z "$tag_prefix" ] && tag_prefix="$(echo "$dist" | sed -n 's|.*\(@[^@]*@\)'"${ver}"'.*|\1|p')"
             elif echo "$dist" | grep -q "v\${version}\|v${ver}\|tags/v"; then
               tag_prefix="v"
             fi

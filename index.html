@@ -177,7 +177,7 @@
 					url = apiUrl + "/api/v4/projects/" + encodeURIComponent(repo) + "/repository/tags";
 				} else if (api === "codeberg") {
 					url = "https://codeberg.org/api/v1/repos/" + repo + "/releases/latest";
-				} else if (prefix === "desktop-v") {
+				} else if (prefix === "desktop-v" || prefix.indexOf("@") === 0) {
 					url = "https://api.github.com/repos/" + repo + "/releases";
 				} else {
 					url = "https://api.github.com/repos/" + repo + "/releases/latest";
@@ -190,9 +190,9 @@
 						var tag;
 						if (api === "gitlab" && Array.isArray(data) && data.length > 0) {
 							tag = data[0].name;
-						} else if (prefix === "desktop-v" && Array.isArray(data)) {
+						} else if ((prefix === "desktop-v" || prefix.indexOf("@") === 0) && Array.isArray(data)) {
 							for (var j = 0; j < data.length; j++) {
-								if (data[j].tag_name && data[j].tag_name.indexOf("desktop-v") === 0) {
+								if (data[j].tag_name && data[j].tag_name.indexOf(prefix) === 0) {
 									tag = data[j].tag_name;
 									break;
 								}
