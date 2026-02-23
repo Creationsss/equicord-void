@@ -1,0 +1,29 @@
+# Template file for 'betterbird'
+pkgname=betterbird
+version=140.8.0esr
+_build=bb19
+revision=1
+archs="x86_64"
+depends="dbus-glib hunspell gtk+3 hicolor-icon-theme desktop-file-utils"
+short_desc="Fine-tuned version of Mozilla Thunderbird"
+maintainer="creations <creations@creations.works>"
+license="MPL-2.0"
+homepage="https://www.betterbird.eu"
+distfiles="https://www.betterbird.eu/downloads/LinuxArchive/${pkgname}-${version}-${_build}.en-US.linux-x86_64.tar.xz"
+checksum=48be40d313b3b60b82e8059d66d55a7a45dc7fa2c67376018a2a5b1aa15be61a
+nostrip=yes
+
+do_install() {
+	vmkdir usr/lib/betterbird
+	vcopy "*" usr/lib/betterbird
+
+	install -m644 ${FILESDIR}/vendor-prefs.js ${DESTDIR}/usr/lib/betterbird/defaults/pref/vendor-prefs.js
+
+	vbin ${FILESDIR}/betterbird.sh betterbird
+	vinstall ${FILESDIR}/betterbird.desktop 644 usr/share/applications
+
+	for i in 16 22 24 32 48 64 128 256; do
+		vinstall chrome/icons/default/default${i}.png 644 \
+			usr/share/icons/hicolor/${i}x${i}/apps betterbird.png
+	done
+}
