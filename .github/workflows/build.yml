@@ -60,7 +60,7 @@ jobs:
               ln -sf "$target" "/void-packages/srcpkgs/$pkgname"
               echo ":: Linked $pkgname -> $target"
             else
-              cp -r "$pkg" "/void-packages/srcpkgs/$pkgname"
+              cp -rT "$pkg" "/void-packages/srcpkgs/$pkgname"
               echo ":: Copied $pkgname"
             fi
           done
