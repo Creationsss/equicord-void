@@ -1,7 +1,7 @@
 # Template file for 'obs-vkcapture'
 pkgname=obs-vkcapture
-version=1.5.3
-revision=2
+version=1.5.5
+revision=1
 build_style=cmake
 hostmakedepends="cmake pkg-config wayland-devel"
 makedepends="Vulkan-Headers vulkan-loader-devel MesaLib-devel obs-devel simde
@@ -12,4 +12,4 @@ maintainer="creations <creations@creations.works>"
 license="GPL-2.0-or-later"
 homepage="https://github.com/nowrep/obs-vkcapture"
 distfiles="https://github.com/nowrep/obs-vkcapture/archive/refs/tags/v${version}.tar.gz"
-checksum=33ac77427ba30f8d4bdd0921b04ad47385afcf2d52575e7023047c7b17ddd858
+checksum=02e79385f5afd6fcc0dbbcdb35adb653a111bf3a0d4d4d7edd82297222f80637
