@@ -55,8 +55,14 @@ jobs:
         run: |
           for pkg in srcpkgs/*/; do
             pkgname="$(basename "$pkg")"
-            cp -r "$pkg" "/void-packages/srcpkgs/$pkgname"
-            echo ":: Copied $pkgname"
+            if [ -L "${pkg%/}" ]; then
+              target="$(readlink "${pkg%/}")"
+              ln -sf "$target" "/void-packages/srcpkgs/$pkgname"
+              echo ":: Linked $pkgname -> $target"
+            else
+              cp -r "$pkg" "/void-packages/srcpkgs/$pkgname"
+              echo ":: Copied $pkgname"
+            fi
           done
 
       - name: Bootstrap xbps-src
@@ -77,14 +83,30 @@ jobs:
       - name: Build packages
         run: |
           cd /void-packages
-          for pkg in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
-            pkgname="$(basename "$pkg")"
+          built=""
+          build_pkg() {
+            local p="$1"
+            echo "$built" | grep -qx "$p" && return 0
+            for dep_dir in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
+              [ -L "${dep_dir%/}" ] && continue
+              dep="$(basename "$dep_dir")"
+              [ "$dep" = "$p" ] && continue
+              if grep -qw "$dep" "$GITHUB_WORKSPACE/srcpkgs/$p/template" 2>/dev/null; then
+                build_pkg "$dep"
+              fi
+            done
             if [ -n "$BUILD_ONLY" ]; then
-              echo "$BUILD_ONLY" | tr ' ' '\n' | grep -qx "$pkgname" || continue
+              echo "$BUILD_ONLY" | tr ' ' '\n' | grep -qx "$p" || { built="$(printf '%s\n%s' "$built" "$p")"; return 0; }
             fi
-            rm -f hostdir/binpkgs/${pkgname}-*.xbps
-            echo ":: Building $pkgname..."
-            ./xbps-src -j"$(nproc)" pkg "$pkgname"
+            rm -f hostdir/binpkgs/${p}-*.xbps
+            echo ":: Building $p..."
+            ./xbps-src -j"$(nproc)" pkg "$p"
+            built="$(printf '%s\n%s' "$built" "$p")"
+          }
+          for pkg in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
+            [ -L "${pkg%/}" ] && continue
+            pkgname="$(basename "$pkg")"
+            build_pkg "$pkgname"
           done
 
       - name: Import signing key
