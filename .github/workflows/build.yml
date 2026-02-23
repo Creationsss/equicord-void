@@ -80,6 +80,9 @@ jobs:
           key: xbps-pkgs-
           restore-keys: xbps-pkgs-
 
+      - name: Clean stale repodata
+        run: rm -f /void-packages/hostdir/binpkgs/*-repodata /void-packages/hostdir/binpkgs/*.plist
+
       - name: Build packages
         run: |
           cd /void-packages
