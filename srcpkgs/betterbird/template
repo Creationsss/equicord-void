@@ -2,6 +2,7 @@
 pkgname=betterbird
 version=140.8.0esr
 _build=bb19
+_vcheck_repo="Betterbird/thunderbird-patches"
 revision=1
 archs="x86_64"
 depends="dbus-glib hunspell gtk+3 hicolor-icon-theme desktop-file-utils"
