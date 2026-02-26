@@ -191,7 +191,10 @@
 					.then(function (data) {
 						var tag;
 						if ((api === "gitlab" || api === "github-tags") && Array.isArray(data) && data.length > 0) {
-							tag = data[0].name;
+							for (var k = 0; k < data.length; k++) {
+								var t = data[k].name;
+								if (!prefix || (t && t.indexOf(prefix) === 0)) { tag = t; break; }
+							}
 						} else if ((prefix === "desktop-v" || prefix.indexOf("@") === 0) && Array.isArray(data)) {
 							for (var j = 0; j < data.length; j++) {
 								if (data[j].tag_name && data[j].tag_name.indexOf(prefix) === 0) {
@@ -203,10 +206,7 @@
 							tag = data.tag_name;
 						}
 
-						if (!tag) {
-							appendStatus(el, "?", "ver-error");
-							return;
-						}
+						if (!tag) return;
 
 						var latest = tag;
 						if (prefix && latest.indexOf(prefix) === 0) {

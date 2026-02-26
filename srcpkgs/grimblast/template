@@ -1,6 +1,6 @@
 # Template file for 'grimblast'
 pkgname=grimblast
-version=20250219
+version=20250219.918f266d
 revision=1
 _commit=918f266dddae39fa4184a1b8bf51ec5381cf29f7
 wrksrc="contrib-${_commit}"
