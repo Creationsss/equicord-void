@@ -12,6 +12,7 @@ license="MIT"
 homepage="https://github.com/hyprwm/contrib"
 distfiles="https://github.com/hyprwm/contrib/archive/${_commit}.tar.gz"
 checksum=3ea5f72d3a1ef6905b20623b77be94ee804ce6b76b60c9b88775bd10a8537412
+_vcheck_tag_prefix="grimblast-v"
 
 do_build() {
 	cd grimblast
