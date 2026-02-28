@@ -173,7 +173,9 @@
 				}
 
 				var url;
-				if (api === "gitlab") {
+				if (api === "labymod") {
+					url = apiUrl || "https://laby.net/api/v3/changelog";
+				} else if (api === "gitlab") {
 					url = apiUrl + "/api/v4/projects/" + encodeURIComponent(repo) + "/repository/tags";
 				} else if (api === "codeberg") {
 					url = "https://codeberg.org/api/v1/repos/" + repo + "/releases/latest";
@@ -190,7 +192,12 @@
 					.then(function (r) { return r.json(); })
 					.then(function (data) {
 						var tag;
-						if ((api === "gitlab" || api === "github-tags") && Array.isArray(data) && data.length > 0) {
+						if (api === "labymod" && Array.isArray(data)) {
+							var filterType = prefix || "LAUNCHER";
+							for (var m = 0; m < data.length; m++) {
+								if (data[m].type === filterType) { tag = data[m].version; break; }
+							}
+						} else if ((api === "gitlab" || api === "github-tags") && Array.isArray(data) && data.length > 0) {
 							for (var k = 0; k < data.length; k++) {
 								var t = data[k].name;
 								if (!prefix || (t && t.indexOf(prefix) === 0)) { tag = t; break; }

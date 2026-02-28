@@ -181,6 +181,14 @@ jobs:
               repo="$(echo "$dist" | sed -n 's|.*heliopolis\.live/\([^/]*/[^/]*\)/.*|\1|p')"
             fi
 
+            vcheck_api="$(sed -n 's/^_vcheck_api="\(.*\)"/\1/p' "$pkg/template")"
+            vcheck_url="$(sed -n 's/^_vcheck_url="\(.*\)"/\1/p' "$pkg/template")"
+            if [ -n "$vcheck_api" ]; then
+              api="$vcheck_api"
+              repo="$name"
+              [ -n "$vcheck_url" ] && api_url="$vcheck_url"
+            fi
+
             if echo "$dist" | grep -q "release_candidate_\${version}\|release_candidate_${ver}"; then
               tag_prefix="release_candidate_"
             elif echo "$dist" | grep -q "desktop-v\${version}\|desktop-v${ver}"; then
