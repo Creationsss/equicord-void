@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=LabyMod Launcher
+Comment=LabyMod Launcher for Minecraft
+GenericName=LabyMod Launcher
+Exec=labymod-launcher %U
+Icon=labymodlauncher
+Type=Application
+StartupNotify=true
+Categories=Game;
