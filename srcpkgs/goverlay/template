@@ -9,13 +9,13 @@ short_desc="Easy graphical interface to configure MangoHud, vkBasalt, and OptiSc
 maintainer="creations <creations@creations.works>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/benjamimgois/goverlay"
-distfiles="https://github.com/benjamimgois/goverlay/releases/download/${version}/goverlay_${_version}-anylinux-x86_64.AppImage"
-checksum=0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5
+distfiles="https://github.com/benjamimgois/goverlay/releases/download/${version}/goverlay_${_version}.AppImage"
+checksum=58b86d16ce88251f94e16279781c062fcd973a55e04fad933d23ed0aa5eb3855
 nostrip=yes
 allow_unknown_shlibs=yes
 
 do_extract() {
-	local _appimage="${XBPS_SRCDISTDIR}/${pkgname}-${version}/goverlay_${_version}-anylinux-x86_64.AppImage"
+	local _appimage="${XBPS_SRCDISTDIR}/${pkgname}-${version}/goverlay_${_version}.AppImage"
 	chmod +x "$_appimage"
 	"$_appimage" --appimage-extract
 	cp -a squashfs-root/. .
