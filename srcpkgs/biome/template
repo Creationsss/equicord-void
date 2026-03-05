@@ -1,6 +1,6 @@
 # Template file for 'biome'
 pkgname=biome
-version=2.4.5
+version=2.4.6
 revision=1
 archs="x86_64"
 short_desc="Fast formatter, linter, and more for JavaScript, TypeScript, CSS, and more"
@@ -8,7 +8,7 @@ maintainer="creations <creations@creations.works>"
 license="Apache-2.0 OR MIT"
 homepage="https://biomejs.dev"
 distfiles="https://github.com/biomejs/biome/releases/download/@biomejs/biome@${version}/biome-linux-x64>biome-${version}"
-checksum=a31815f19b0b90fa043eb23fbf769ed931fbcde6d98bb89894ea8be1387d8394
+checksum=6bc192f1f0b3495443472d95bd4dbfc9372c17f7ac51256d635192ca525da59d
 nostrip=yes
 skip_extraction="biome-${version}"
 
