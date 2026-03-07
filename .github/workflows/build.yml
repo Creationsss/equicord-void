@@ -128,6 +128,7 @@ jobs:
           xbps-rindex --privkey /tmp/keys/private.pem --sign --signedby "Creations Void Repo" .
           xbps-rindex --privkey /tmp/keys/private.pem --sign-pkg *.xbps
           rm -f /tmp/keys/private.pem
+          cp "$GITHUB_WORKSPACE/repo-signing-key.pem" .
 
       - name: Save package cache
         uses: actions/cache/save@v4
