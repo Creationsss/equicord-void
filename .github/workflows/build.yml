@@ -77,8 +77,8 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: /void-packages/hostdir/binpkgs
-          key: xbps-pkgs-v2-
-          restore-keys: xbps-pkgs-v2-
+          key: xbps-pkgs-v3-
+          restore-keys: xbps-pkgs-v3-
 
       - name: Clean stale repodata
         run: rm -f /void-packages/hostdir/binpkgs/*-repodata /void-packages/hostdir/binpkgs/*.plist
@@ -134,7 +134,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: /void-packages/hostdir/binpkgs
-          key: xbps-pkgs-v2-${{ github.run_id }}
+          key: xbps-pkgs-v3-${{ github.run_id }}
 
       - name: Prepare site
         run: |
