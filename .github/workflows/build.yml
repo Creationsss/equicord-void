@@ -91,7 +91,7 @@ jobs:
             if [ -n "$BUILD_ONLY" ]; then
               echo "$BUILD_ONLY" | tr ' ' '\n' | grep -qx "$pkgname" || { built="$(printf '%s\n%s' "$built" "$pkgname")"; return 0; }
             fi
-            rm -f hostdir/binpkgs/${pkgname}-*.xbps
+            rm -f hostdir/binpkgs/${pkgname}-*.xbps hostdir/binpkgs/${pkgname}-*.xbps.sig2
             echo ":: Building $pkgname..."
             ./xbps-src -j"$(nproc)" pkg "$pkgname"
             built="$(printf '%s\n%s' "$built" "$pkgname")"
