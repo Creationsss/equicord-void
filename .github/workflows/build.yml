@@ -7,11 +7,9 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: deploy
   cancel-in-progress: false
 
 jobs:
@@ -136,32 +134,6 @@ jobs:
           path: /void-packages/hostdir/binpkgs
           key: xbps-pkgs-v3-${{ github.run_id }}
 
-      - name: Slim repo for Pages
-        run: |
-          cd /void-packages/hostdir/binpkgs
-          # remove debug subpackages
-          rm -f *-dbg-*.xbps *-dbg-*.xbps.sig2
-          # remove cached packages no longer in srcpkgs
-          for xbps in *.xbps; do
-            [ -f "$xbps" ] || continue
-            pkgver="${xbps%.x86_64.xbps}"
-            pkgname="$(xbps-uhelper getpkgname "$pkgver" 2>/dev/null)" || continue
-            found=false
-            for src in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
-              src_name="$(basename "$src")"
-              if [ "$pkgname" = "$src_name" ]; then
-                found=true
-                break
-              fi
-            done
-            if ! $found; then
-              echo ":: Removing stale: $xbps"
-              rm -f "$xbps" "${xbps}.sig2"
-            fi
-          done
-          xbps-rindex --clean .
-          echo ":: Repo size: $(du -sh . | cut -f1)"
-
       - name: Prepare site
         run: |
           pkglist=""
@@ -240,18 +212,12 @@ jobs:
           d
           }' /void-packages/hostdir/binpkgs/index.html
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: /void-packages/hostdir/binpkgs
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Upload to R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
+        run: |
+          xbps-install -y aws-cli
+          cd /void-packages/hostdir/binpkgs
+          aws s3 sync . s3://void-repo/ --delete --no-sign-request=false
