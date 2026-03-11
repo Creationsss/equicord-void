@@ -23,8 +23,12 @@ do_extract() {
 }
 
 do_install() {
-	vbin usr/bin/flightcore
-	vinstall FlightCore.desktop 644 usr/share/applications flightcore.desktop
+	vmkdir usr/lib/flightcore
+	vcopy usr/bin/flightcore usr/lib/flightcore
+	vcopy "usr/lib/*" usr/lib/flightcore
+	chmod 755 ${DESTDIR}/usr/lib/flightcore/flightcore
+	vbin ${FILESDIR}/flightcore.sh flightcore
+	vinstall ${FILESDIR}/flightcore.desktop 644 usr/share/applications
 	vinstall flightcore.png 644 usr/share/pixmaps
 	vlicense ${FILESDIR}/LICENSE
 }
