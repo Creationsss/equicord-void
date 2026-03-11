@@ -1,3 +1,3 @@
 #!/bin/sh
-export GDK_BACKEND=x11
+export WEBKIT_DISABLE_COMPOSITING_MODE=1
 exec /usr/lib/flightcore/flightcore "$@"
