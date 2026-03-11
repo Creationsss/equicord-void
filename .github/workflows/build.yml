@@ -136,6 +136,32 @@ jobs:
           path: /void-packages/hostdir/binpkgs
           key: xbps-pkgs-v3-${{ github.run_id }}
 
+      - name: Slim repo for Pages
+        run: |
+          cd /void-packages/hostdir/binpkgs
+          # remove debug subpackages
+          rm -f *-dbg-*.xbps *-dbg-*.xbps.sig2
+          # remove cached packages no longer in srcpkgs
+          for xbps in *.xbps; do
+            [ -f "$xbps" ] || continue
+            pkgver="${xbps%.x86_64.xbps}"
+            pkgname="$(xbps-uhelper getpkgname "$pkgver" 2>/dev/null)" || continue
+            found=false
+            for src in "$GITHUB_WORKSPACE"/srcpkgs/*/; do
+              src_name="$(basename "$src")"
+              if [ "$pkgname" = "$src_name" ]; then
+                found=true
+                break
+              fi
+            done
+            if ! $found; then
+              echo ":: Removing stale: $xbps"
+              rm -f "$xbps" "${xbps}.sig2"
+            fi
+          done
+          xbps-rindex --clean .
+          echo ":: Repo size: $(du -sh . | cut -f1)"
+
       - name: Prepare site
         run: |
           pkglist=""

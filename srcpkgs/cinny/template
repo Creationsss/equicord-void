@@ -26,7 +26,7 @@ do_install() {
 	vcopy AppRun usr/lib/cinny
 	vcopy AppRun.wrapped usr/lib/cinny
 	vcopy apprun-hooks usr/lib/cinny
-	vcopy cinny.desktop usr/lib/cinny
+	vcopy Cinny.desktop usr/lib/cinny
 	vcopy cinny.png usr/lib/cinny
 	vcopy usr usr/lib/cinny
 	chmod 755 ${DESTDIR}/usr/lib/cinny/AppRun
